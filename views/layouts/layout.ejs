@@ -6,12 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mybrary</title>
   </head>
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+  </style>
   <body>
-    Before
-    <br />
+    <!-- Here We include the static html in our header.ejs file this will be included on all our views  -->
+    <%- include('../partials/header.ejs') %>
     <!-- Here we put the actual content of our app what ever we put in our other ejs files will be inserted/imported here -->
     <%- body %>
-    <br />
-    After
   </body>
 </html>
