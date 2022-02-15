@@ -13,7 +13,8 @@
   </style>
   <body>
     <!-- Here We include the static html in our header.ejs file this will be included on all our views  -->
-    <%- include('../partials/header.ejs') %>
+    <%- include('../partials/header.ejs') %> <%-
+    include('../partials/errorMessage.ejs')%>
     <!-- Here we put the actual content of our app what ever we put in our other ejs files will be inserted/imported here -->
     <%- body %>
   </body>

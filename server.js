@@ -7,6 +7,10 @@ const express = require("express");
 const app = express();
 const expressLayouts = require("express-ejs-layouts");
 
+//?We use these built in express middlewares in order for us to be able to read the “body” of an incoming JSON object allow us to get access to the req body and all the data/variables in the request body
+app.use(express.json());
+app.use(express.urlencoded({ limit: "10mb", extended: false }));
+
 //? We import the file here and set it to be the indexRouter because this router deals ONLY with requests to the main page '/'
 const indexRouter = require("./routes/index");
 
