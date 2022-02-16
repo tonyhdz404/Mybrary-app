@@ -16,6 +16,7 @@ const indexRouter = require("./routes/index");
 
 //? Creating a router for the author views
 const authorRouter = require("./routes/author");
+const bookRouter = require("./routes/books");
 
 //? Here we specify what view engine we are using. A view engine allows us to insert javascript from our server INTO an HTML file. AKA The view engine is responsible for creating HTML from your views by replaces variables in a template file with actual values
 app.set("view engine", "ejs");
@@ -45,11 +46,14 @@ const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("Connected to Mongoose"));
 
+//! Mounting Our Routers
 //? Here we specify that all requests to the '/' endpoint will be handled by the indexRouter
 app.use("/", indexRouter);
 
 app.use("/authors", authorRouter);
+app.use("/books", bookRouter);
 
+//! Starting Our Server
 //? Here we set up out server to listen for any request at PORT 3000
 app.listen(3000, () => {
   console.log("Server Running on PORT: 3000");

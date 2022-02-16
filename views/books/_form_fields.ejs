@@ -1,0 +1,61 @@
+<!-- This is a partial file that will not be rendered by its self it will be INCLUDED by other pages in this case it is a form field for a name -->
+<!-- We also want to set the value attribute (The initial value of the control/input) to be the passed in author .name in the event that we are EDITING a author because the author will already have a name -->
+<div class="form__group">
+  <label for="title">Title</label>
+  <input
+    type="text"
+    name="title"
+    id="title"
+    value="<%=
+  book.title %>"
+  />
+</div>
+
+<div class="form__group">
+  <label for="author">Author</label>
+  <!-- Here Since We can want the user to selecte from only a dropdown of authors in our database we have to import allAuthors then use the magic of ejs to loop through all of the authors -->
+  <select name="author">
+    <% allAuthors.forEach(author =>{ %> <% if(author.id === book.author){%>
+    <option
+      selected
+      label="<%= author.name %>"
+      value="<%= author.id %>"
+    ></option>
+    <%}else{ %>
+    <option label="<%= author.name %>" value="<%= author.id %>"></option>
+    <%} %> <%}) %>
+  </select>
+</div>
+
+<div class="form__group">
+  <label for="publishDate">Publish Date</label>
+  <input
+    type="date"
+    name="publishDate"
+    id="publishDate"
+    value="<%=book.publishDate == null ? '':book.publishDate.toISOString().split('T')[0] %>"
+  />
+</div>
+
+<div class="form__group">
+  <label for="pageCount">Page Count</label>
+  <input
+    type="number"
+    name="pageCount"
+    id="pageCount"
+    min="1"
+    value="<%= book.pageCount %>"
+  />
+</div>
+
+<div class="form__group">
+  <label for="cover">Cover</label>
+  <input type="file" name="cover" id="cover" />
+</div>
+
+<div class="form__group">
+  <label for="description">Description</label>
+  <textarea name="description" id="description" cols="30" rows="10">
+<% book.description %> 
+  </textarea>
+</div>
