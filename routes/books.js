@@ -3,19 +3,8 @@ const Author = require("../models/author");
 const Book = require("../models/book");
 const express = require("express");
 const bookRouter = express.Router();
-const fs = require("fs");
-//? By importing multer we can work with files UPLOADED to our form aka. We use multer to get the files name
-const multer = require("multer");
-const path = require("path");
-const req = require("express/lib/request");
-const uploadPath = path.join("public", Book.coverImgBasePath);
+
 const imageMimeTypes = ["image/jpeg", "image/png", "image/gif"];
-const upload = multer({
-  dest: uploadPath,
-  fileFilter: (req, file, callback) => {
-    callback(null, imageMimeTypes.includes(file.mimetype));
-  },
-});
 
 //* ALL Books Route
 
@@ -44,29 +33,26 @@ bookRouter.get("/new", async (req, res) => {
   renderNewPage(res, new Book());
 });
 
-//* CREATING Author Route
+//* CREATING Book Route
 //? Here is all the logic for creating our new book When we get a POST req to the index page we take all the data in the req.body that we got from filling out the form and create a new book with that data and add it to the book schema
-bookRouter.post("/", upload.single("cover"), async (req, res) => {
-  //? We DONT want to store the img file in our database we JUST want to the corresponding file name that we will use to serve the img
-  const fileName = req.file != null ? req.file.filename : null;
-
+bookRouter.post("/", async (req, res) => {
   const book = new Book({
     title: req.body.title,
     author: req.body.author,
     publishDate: new Date(req.body.publishDate),
     pageCount: req.body.pageCount,
-    coverImgName: fileName,
     description: req.body.description,
   });
+
+  //* Taking the data from req.body.cover and saving the img and img type to our book object
+  saveCover(book, req.body.cover);
+
   //? Once we have created our new book instance we can now try and save it
   try {
     const newBook = await book.save();
     // res.redirect(`books/${newBook.id}`);
     res.redirect(`books`);
   } catch (error) {
-    if (book.coverImgName != null) {
-      removeBookCover(book.coverImgName);
-    }
     renderNewPage(res, book, true);
   }
 });
@@ -81,12 +67,15 @@ async function renderNewPage(res, book, hasError = false) {
     res.redirect("/books");
   }
 }
-function removeBookCover(fileName) {
-  fs.unlink(path.join(uploadPath, fileName), (error) => {
-    if (error) {
-      console.error(error);
-    }
-  });
+
+//? When we upload a cover img in our form we DONT send the actual file we send a JSON with the file/photo data and the the file encoded along with it. To actually save the file/phot we first pass in the book object and the encoded data which is saved in req.body.cover. IF there is no uploaded img we do nothing ELSE we use JSON.parse() to convert the JSON to a JS object. The ONLY if the uploaded file is the correct img type and there is a valid JS object created from the JSON.parse(coverEncoded) We SAVE the decoded img as the book.coverImg and SAVE the type to book.coverImgType
+function saveCover(book, coverEncoded) {
+  if (coverEncoded == null) return;
+  const cover = JSON.parse(coverEncoded);
+  if (cover != null && imageMimeTypes.includes(cover.type)) {
+    book.coverImg = new Buffer.from(cover.data, "base64");
+    book.coverImgType = cover.type;
+  }
 }
 
 module.exports = bookRouter;

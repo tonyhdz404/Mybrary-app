@@ -50,12 +50,13 @@
 
 <div class="form__group">
   <label for="cover">Cover</label>
-  <input type="file" name="cover" id="cover" />
+  <!-- By adding the class of "filepond" we make this file input a FILEPOND brand input -->
+  <input type="file" class="filepond" name="cover" />
 </div>
 
 <div class="form__group">
   <label for="description">Description</label>
   <textarea name="description" id="description" cols="30" rows="10">
-<% book.description %> 
-  </textarea>
+<% book.description %></textarea
+  >
 </div>
