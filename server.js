@@ -7,7 +7,11 @@ const express = require("express");
 const app = express();
 const expressLayouts = require("express-ejs-layouts");
 
-//?We use these built in express middlewares in order for us to be able to read the “body” of an incoming JSON object allow us to get access to the req body and all the data/variables in the request body
+//? method-override Lets you use HTTP verbs such as PUT or DELETE in places where the client doesn't support it. From a browser we can only make GET and POST requests we cant inherently
+const methodOverride = require("method-override");
+app.use(methodOverride("_method"));
+
+//? We use these built in express middlewares in order for us to be able to read the “body” of an incoming JSON object allow us to get access to the req body and all the data/variables in the request body
 app.use(express.json());
 app.use(express.urlencoded({ limit: "10mb", extended: false }));
 
