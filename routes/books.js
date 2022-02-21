@@ -7,7 +7,6 @@ const bookRouter = express.Router();
 const imageMimeTypes = ["image/jpeg", "image/png", "image/gif"];
 
 //* ALL Books Route
-
 bookRouter.get("/", async (req, res) => {
   let query = Book.find();
   if (req.query.title != null && req.query.title != "") {
@@ -50,19 +49,101 @@ bookRouter.post("/", async (req, res) => {
   //? Once we have created our new book instance we can now try and save it
   try {
     const newBook = await book.save();
-    // res.redirect(`books/${newBook.id}`);
-    res.redirect(`books`);
+    res.redirect(`books/${newBook.id}`);
   } catch (error) {
     renderNewPage(res, book, true);
   }
 });
+//* SHOWING A Single Book
+//? To display a single book we take the id from the params and use it to find the book by using findById() how ever the authors name is NOT actually stored in the book object only the authors ID is stored
+bookRouter.get("/:id", async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id).populate("author").exec();
+
+    res.render("books/show", { book: book });
+  } catch (error) {
+    res.redirect("/");
+  }
+});
+
+//* Edit Book Route
+bookRouter.get("/:id/edit", async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+    renderEditPage(res, book);
+  } catch (error) {
+    console.log(error);
+    res.redirect("/");
+  }
+});
+
+//* UPDATE BOOK
+bookRouter.put("/:id", async (req, res) => {
+  let book;
+  try {
+    book = await Book.findById(req.params.id);
+    book.title = req.body.title;
+    book.author = req.body.author;
+    book.publishDate = new Date(req.body.publishDate);
+    book.pageCount = req.body.pageCount;
+    book.description = req.body.description;
+    if (req.body.cover != null && req.body.cover !== "") {
+      saveCover(book, req.body.cover);
+    }
+    await book.save();
+    res.redirect(`/books/${book.id}`);
+  } catch (error) {
+    console.log(error);
+    if (book != null) {
+      renderEditPage(res, book, true);
+    } else {
+      res.redirect("/");
+    }
+  }
+});
+
+//* Delete Book Page
+bookRouter.delete("/:id", async (req, res) => {
+  let book;
+  try {
+    book = await Book.findById(req.params.id);
+    await book.remove();
+    res.redirect("/books");
+  } catch (error) {
+    if (book != null) {
+      res.render(`books/show`, {
+        book: book,
+        errorMessage: "Could Not Remove Book 😭",
+      });
+    } else {
+      res.redirect("/");
+    }
+  }
+});
 
 async function renderNewPage(res, book, hasError = false) {
+  renderFormPage(res, book, "new", hasError);
+}
+
+async function renderEditPage(res, book, hasError = false) {
+  renderFormPage(res, book, "edit", hasError);
+}
+
+async function renderFormPage(res, book, form, hasError = false) {
   try {
     const allAuthors = await Author.find({});
-    const params = { allAuthors: allAuthors, book: book };
-    if (hasError) params.errorMessage = "Error Creating Book";
-    res.render("books/new", params);
+    const params = {
+      authors: allAuthors,
+      book: book,
+    };
+    if (hasError) {
+      if ((form = "edit")) {
+        params.errorMessage = "Error Updating Book";
+      } else {
+        params.errorMessage = "Error Creating Book";
+      }
+    }
+    res.render(`books/${form}`, params);
   } catch (error) {
     res.redirect("/books");
   }

@@ -15,7 +15,7 @@
   <label for="author">Author</label>
   <!-- Here Since We can want the user to selecte from only a dropdown of authors in our database we have to import allAuthors then use the magic of ejs to loop through all of the authors -->
   <select name="author">
-    <% allAuthors.forEach(author =>{ %> <% if(author.id === book.author){%>
+    <% authors.forEach(author =>{ %> <% if(author.id === book.author){%>
     <option
       selected
       label="<%= author.name %>"

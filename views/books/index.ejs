@@ -32,6 +32,9 @@
 <!-- Here since we passed in the allAuthors object we can loop through it and display each ones name -->
 <div class="form__group">
   <% books.forEach(book=>{ %>
-  <img height="150" width="100" src="<%= book.coverImgPath %> " alt="" />
+  <a href="/books/<%= book.id %>">
+    <img height="150" width="100" src="<%= book.coverImgPath %> " alt="" />
+  </a>
+
   <%}) %>
 </div>
