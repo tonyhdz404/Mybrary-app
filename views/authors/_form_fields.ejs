@@ -1,10 +1,14 @@
 <!-- This is a partial file that will not be rendered by its self it will be INCLUDED by other pages in this case it is a form field for a name -->
 <!-- We also want to set the value attribute (The initial value of the control/input) to be the passed in author .name in the event that we are EDITING a author because the author will already have a name -->
-<label for="name">Name</label>
-<input
-  type="text"
-  name="name"
-  id="name"
-  value="<%=
-author.name %>"
-/>
+<div class="form-row">
+  <div class="form-item">
+    <label for="name">Name</label>
+    <input
+      type="text"
+      name="name"
+      id="name"
+      value="<%=
+    author.name %>"
+    />
+  </div>
+</div>

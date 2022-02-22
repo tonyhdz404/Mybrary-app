@@ -1,8 +1,10 @@
 <h2 class="page-header"><%= author.name %>📚</h2>
-<a href="/authors/<%= author.id %>/edit">Edit</a>
-<%- include(`../partials/deleteForm`,{url:`/authors/${author.id}`}) %> <%
-if(books.length >0){ %>
-<h2>Books By Author:</h2>
+<div class="btn-row">
+  <a class="btn btn-primary" href="/authors/<%= author.id %>/edit">Edit</a>
+  <%- include(`../partials/deleteForm`,{url:`/authors/${author.id}`}) %>
+</div>
+<% if(books.length >0){ %>
+<h2 class="page-header">Books By Author:</h2>
 <div class="form__group">
   <% books.forEach(book=>{ %>
   <a href="/books/<%= book.id %> ">
