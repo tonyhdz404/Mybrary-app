@@ -1,3 +1,5 @@
 <!-- In this partial we render the an error message -->
 <!-- IF there is an erroMessage variable being passed in we display the errorMessage -->
-<% if (locals.errorMessage != null) { %> <%= errorMessage %> <% } %>
+<% if (locals.errorMessage != null) { %>
+<div class="errorMsg"><%= errorMessage %></div>
+<% } %>

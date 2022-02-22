@@ -2,6 +2,8 @@
 @import "shared/header.css";
 @import "shared/buttons.css";
 @import "shared/form.css";
+@import "shared/author.css";
+@import "shared/book.css";
 
 :root {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
@@ -37,4 +39,7 @@ body {
 .page-header {
   font-size: 2rem;
   font-weight: 500;
+}
+.errorMsg {
+  color: hsl(var(--color-danger-hue), 100%, 50%);
 }
