@@ -1,4 +1,4 @@
 <!-- Since a elments can ONLY sent GET and POST requests to send a DELETE req we have to use a form. We set the initial method to POST but we will override that. As for the action we pass in the authors/author:id then we define a query parameter of _method and set it equal to DELETE what we actually want todo. This happens becasuse we have told our server that when they see _method we want to OVERIDED the post method and DELETE. methodOverride("_method")  -->
 <form method="post" action="<%= url %>?_method=DELETE">
-  <button type="submit" style="background-color: tomato">Delete</button>
+  <button class="btn btn-danger" type="submit">Delete</button>
 </form>

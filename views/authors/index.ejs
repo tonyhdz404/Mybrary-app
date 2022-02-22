@@ -1,4 +1,4 @@
-<h2>Search Authors</h2>
+<h2 class="page-header">Search Authors</h2>
 <form action="/authors" method="get">
   <label for="name">Name</label>
   <input type="text" name="name" value="<%= searchOptions.name %> " />
@@ -9,7 +9,10 @@
 <!-- Here since we passed in the allAuthors object we can loop through it and display each ones name -->
 <% allAuthors.forEach(author=>{ %>
 <div><%= author.name %></div>
-<a href="/authors/<%= author.id %>">View</a>
-<a href="/authors/<%= author.id %>/edit">Edit</a>
-<!-- Here we include the deleteForm Partial and pass in the url as the author/author.id -->
-<%- include('../partials/deleteForm',{url:`/authors/${author.id}`}) %> <%})%>
+<div class="btn-row">
+  <a class="btn btn-primary" href="/authors/<%= author.id %>">View</a>
+  <a class="btn btn-primary" href="/authors/<%= author.id %>/edit">Edit</a>
+  <!-- Here we include the deleteForm Partial and pass in the url as the author/author.id -->
+  <%- include('../partials/deleteForm',{url:`/authors/${author.id}`}) %>
+</div>
+<%})%>
